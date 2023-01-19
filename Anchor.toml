@@ -2,13 +2,13 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-fd_random_number = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+fd_random_number = "GQxAciaZvaJCEJGWVzZtNVuP571PDGN7SmDDpdUdF3Xu"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "https://newest-fabled-orb.solana-devnet.discover.quiknode.pro/7584b10951ab6be93c1f3a55c00ee6f46e74da8a/"
 wallet = "/home/chuo/.config/solana/id.json"
 
 [scripts]
