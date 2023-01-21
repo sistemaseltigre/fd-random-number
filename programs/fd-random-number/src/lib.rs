@@ -6,7 +6,7 @@ declare_id!("GQxAciaZvaJCEJGWVzZtNVuP571PDGN7SmDDpdUdF3Xu");
 pub mod fd_random_number {
     use super::*;
 
-    pub fn get_random_number(_ctx: Context<Initialize>) -> Result<()> {
+    pub fn get_random_number(ctx: Context<Dropcoin>) -> Result<()> {
         msg!("Creating function distribution number...");           
     
         //Generate random number BEGIN
@@ -56,10 +56,55 @@ pub mod fd_random_number {
         // Generate random number END    
     
         msg!("number generated: {}", random_number);
+        msg!("number generated: {}", ctx.accounts.pda_data_drop.key());
+        ctx.accounts.pda_data_drop.random_number = random_number;
+        ctx.accounts.pda_data_drop.player_pubkey_drop = ctx.accounts.player.key();
        
         Ok(())
     }
 }
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct Dropcoin<'info> {
+   
+    
+    #[account(mut)]
+    pub player: UncheckedAccount<'info>, // public key player
+    pub enemy: UncheckedAccount<'info>, // enemy pda data
+    pub num: UncheckedAccount<'info>, //account associed with pda counter enemyes die for this player
+    
+     // CHECK: Manual validation
+    #[account(
+        init_if_needed,
+        payer = pool_game,
+        space =  std::mem::size_of::<UserDropInfo>() + 8,
+        seeds = ["drop".as_bytes().as_ref()], 
+        bump
+    )]
+    pub pda_data_drop: Account<'info, UserDropInfo>,
+    
+
+     #[account(mut)]
+    pub pool_game: Signer<'info>, // pool game sign tx 
+    pub system_program: Program<'info, System>,
+}
+//#[derive(BorshDeserialize, BorshSerialize, Debug, Default, PartialEq)]
+//pub struct ProgramAccountState {
+  //  is_initialized: bool,
+
+#[account]
+pub struct UserDropInfo {
+    pub random_number: u64,
+    pub player_pubkey_drop: Pubkey,
+    pub is_initialized: bool,
+}
+
+#[account]
+pub struct PlayerInfo {
+    pub player_pubkey: Pubkey,
+}
+
+#[account]
+pub struct NumberInfo {
+    pub random_number: u64,
+}
