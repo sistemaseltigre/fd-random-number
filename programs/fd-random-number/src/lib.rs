@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 
-declare_id!("GQxAciaZvaJCEJGWVzZtNVuP571PDGN7SmDDpdUdF3Xu");
+declare_id!("");
 
 #[program]
 pub mod fd_random_number {
     use super::*;
 
-    pub fn get_random_number(ctx: Context<Dropcoin>) -> Result<()> {
+    pub fn getrandomnumber(ctx: Context<Dropcoin>) -> Result<()> {
         msg!("Creating function distribution number...");           
     
         //Generate random number BEGIN
@@ -53,8 +53,11 @@ pub mod fd_random_number {
     
         let random_number = fd_arr[random_value];
       
-        // Generate random number END    
-    
+        // Generate random number END
+        let counter = &mut ctx.accounts.counter;
+        msg!("Previous Count: { }", counter.count);
+        counter.count = counter.count.checked_add(1).unwrap();
+        msg!("Previous Count: { }", counter.count);
         msg!("number generated: {}", random_number);
         msg!("number generated: {}", ctx.accounts.pda_data_drop.key());
         ctx.accounts.pda_data_drop.random_number = random_number;
@@ -72,13 +75,20 @@ pub struct Dropcoin<'info> {
     pub player: UncheckedAccount<'info>, // public key player
     pub enemy: UncheckedAccount<'info>, // enemy pda data
     pub num: UncheckedAccount<'info>, //account associed with pda counter enemyes die for this player
-    
+    #[account(
+        init_if_needed,
+        payer = pool_game,
+        space = 8 + 8,
+        seeds = ["enemykill".as_bytes().as_ref(), player.key().as_ref()],
+        bump
+    )]
+    pub counter: Account<'info, Counter>,
      // CHECK: Manual validation
     #[account(
         init_if_needed,
         payer = pool_game,
         space =  std::mem::size_of::<UserDropInfo>() + 8,
-        seeds = ["drop".as_bytes().as_ref()], 
+        seeds = ["drop".as_bytes().as_ref(), player.key().as_ref(), enemy.key().as_ref(), &[counter.count]], 
         bump
     )]
     pub pda_data_drop: Account<'info, UserDropInfo>,
@@ -107,4 +117,9 @@ pub struct PlayerInfo {
 #[account]
 pub struct NumberInfo {
     pub random_number: u64,
+}
+
+#[account]
+pub struct Counter {
+    pub count: u8,
 }
