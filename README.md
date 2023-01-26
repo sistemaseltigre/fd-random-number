@@ -10,7 +10,7 @@ In probability theory, the probability function f(x) is used, also called probab
 
 
 
-2. ∑ f (x)=1
+2. ![Image text](https://github.com/sistemaseltigre/fd-random-number/blob/main/app/3.png)
 
 
 
@@ -20,13 +20,7 @@ In probability theory, the probability function f(x) is used, also called probab
 
 The distribution function F(x) is defined from the probability density according to the following:
 
-
-
-
-
-F(x) = P(x ≤ x) = ∑ f (t)
-
-
+![Image text](https://github.com/sistemaseltigre/fd-random-number/blob/main/app/2.png)
 
 
 
@@ -37,8 +31,7 @@ Sometimes the distribution function is known as the cumulative distribution func
 It is possible to calculate the probability of an event from the distribution function. If x1, x2,…,xn are elements of the random variable X, the relationship is valid:
 
 
-
-P(xi+1) = F(xi+1) – F(xi)
+![Image text](https://github.com/sistemaseltigre/fd-random-number/blob/main/app/1.png)
 
 
 
@@ -54,7 +47,7 @@ The shape of the desired distribution function is of the sigmoid type, as seen i
 
 
 
-
+![Image text](https://github.com/sistemaseltigre/fd-random-number/blob/main/app/graf.png)
 
 
 # Solana Program
@@ -72,5 +65,5 @@ If you want to try, you can copy the code from lib.rs and paste it at https://be
 
 
 
-# special thanks
+# Special thanks
 This mathematical logic was created thanks to Mario Cabrera, professional Master in Physics.
