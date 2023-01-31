@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 
-declare_id!("");
+declare_id!("BSenu1evjTH5CZ9uKrrSRXAMRHbV7r3u99fx6b5M7qV3");
 
 #[program]
 pub mod fd_random_number {
     use super::*;
 
-    pub fn getrandomnumber(ctx: Context<Dropcoin>) -> Result<()> {
+    pub fn getrandomnumber(ctx: Context<Dropcoin>, enemyid:u8) -> Result<()> {
         msg!("Creating function distribution number...");           
     
         //Generate random number BEGIN
@@ -57,25 +57,24 @@ pub mod fd_random_number {
         let counter = &mut ctx.accounts.counter;
         msg!("Previous Count: { }", counter.count);
         counter.count = counter.count.checked_add(1).unwrap();
-        msg!("Previous Count: { }", counter.count);
+        msg!("New Count: { }", counter.count);
         msg!("number generated: {}", random_number);
-        msg!("number generated: {}", ctx.accounts.pda_data_drop.key());
-        ctx.accounts.pda_data_drop.random_number = random_number;
-        ctx.accounts.pda_data_drop.player_pubkey_drop = ctx.accounts.player.key();
+        msg!("new account generated: {}", ctx.accounts.drop.key());
+        ctx.accounts.drop.randomnumber = random_number;
+        ctx.accounts.drop.player_pubkey_drop = ctx.accounts.player.key();
        
         Ok(())
     }
 }
 
 #[derive(Accounts)]
+#[instruction(enemyid: u8)]
 pub struct Dropcoin<'info> {
    
     
     #[account(mut)]
     pub player: UncheckedAccount<'info>, // public key player
-    pub enemy: UncheckedAccount<'info>, // enemy pda data
-    pub num: UncheckedAccount<'info>, //account associed with pda counter enemyes die for this player
-    #[account(
+      #[account(
         init_if_needed,
         payer = pool_game,
         space = 8 + 8,
@@ -83,15 +82,26 @@ pub struct Dropcoin<'info> {
         bump
     )]
     pub counter: Account<'info, Counter>,
+     
+    
+     #[account(
+        init_if_needed,
+        payer = pool_game,
+        space = 8 + 8,
+        seeds = ["enemy".as_bytes().as_ref(), &[enemyid]],
+        bump
+    )]
+    pub enemy: Account<'info, Enemy>, // enemy pda data
+  
      // CHECK: Manual validation
     #[account(
         init_if_needed,
         payer = pool_game,
-        space =  std::mem::size_of::<UserDropInfo>() + 8,
+        space =  std::mem::size_of::<Userdropinfo>() + 8,
         seeds = ["drop".as_bytes().as_ref(), player.key().as_ref(), enemy.key().as_ref(), &[counter.count]], 
         bump
     )]
-    pub pda_data_drop: Account<'info, UserDropInfo>,
+    pub drop: Account<'info, Userdropinfo>,
     
 
      #[account(mut)]
@@ -103,8 +113,8 @@ pub struct Dropcoin<'info> {
   //  is_initialized: bool,
 
 #[account]
-pub struct UserDropInfo {
-    pub random_number: u64,
+pub struct Userdropinfo {
+    pub randomnumber: i32,
     pub player_pubkey_drop: Pubkey,
     pub is_initialized: bool,
 }
@@ -122,4 +132,10 @@ pub struct NumberInfo {
 #[account]
 pub struct Counter {
     pub count: u8,
+    pub idenemy: u8,
+}
+
+#[account]
+pub struct Enemy {
+    pub enemy: u8,
 }
