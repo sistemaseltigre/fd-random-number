@@ -65,10 +65,10 @@ If you want to try, you can copy the code from lib.rs and paste it at https://be
 
 ## Lifecycle
 
-1 - Cliente get enemy number
-2 - Client create a pseudo-random number
-    2.1 - Send varibles to solana program function (getrandomnumber)
-		    2.1.1 example:
+1 - Cliente get enemy number<br>
+2 - Client create a pseudo-random number<br>
+    2.1 - Send varibles to solana program function (getrandomnumber)<br>
+		    2.1.1 example:<br>
 		    
 		const txHash = await program.methods.getrandomnumber(enemyid,rncli).accounts({
 			drop: userStatsPDA,
@@ -80,13 +80,13 @@ If you want to try, you can copy the code from lib.rs and paste it at https://be
 		})  
 		.signers([firstWinWallet]).rpc();
 	        
-   2.2 - Function sum (timestamp + enemyid number + pseudo-random number) to create a main number
-   2.3 - Main number is used to calculate an acumulative function distribution
-   2.4 - Get randon number generated
-   2.5 - Get counter data
-   2.6 - Add new counter data
-   2.7 - Create a new account PDA and save random number and player key
-3 - You can create a fetch function to get a random number generated
+   2.2 - Function sum (timestamp + enemyid number + pseudo-random number) to create a main number<br>
+   2.3 - Main number is used to calculate an acumulative function distribution<br>
+   2.4 - Get randon number generated<br>
+   2.5 - Get counter data<br>
+   2.6 - Add new counter data<br>
+   2.7 - Create a new account PDA and save random number and player key<br>
+3 - You can create a fetch function to get a random number generated<br>
 	3.1 example:
     
     let fdn_tx = await program.account.userdropinfo.fetch(userStatsPDA).catch((error) => {
