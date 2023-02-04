@@ -69,8 +69,8 @@ If you want to try, you can copy the code from lib.rs and paste it at https://be
 2 - Client create a pseudo-random number
     2.1 - Send varibles to solana program function (getrandomnumber)
         2.1.1 example:
-        ```
-        const txHash = await program.methods.getrandomnumber(enemyid,rncli).accounts({
+
+        ``` const txHash = await program.methods.getrandomnumber(enemyid,rncli).accounts({
             drop: userStatsPDA,
             player: player_pk_key,
             enemy: enemy_pk_key,       
@@ -78,9 +78,8 @@ If you want to try, you can copy the code from lib.rs and paste it at https://be
             poolGame: firstWinWallet.publicKey,
             systemProgram: web3.SystemProgram.programId,
         })   
-        .signers([firstWinWallet]).rpc();
-
-        ```
+        .signers([firstWinWallet]).rpc();```
+    
     2.2 - Function sum (timestamp + enemyid number + pseudo-random number) to create a main number
     2.3 - Main number is used to calculate an acumulative function distribution
     2.4 - Get randon number generated
@@ -89,12 +88,10 @@ If you want to try, you can copy the code from lib.rs and paste it at https://be
     2.7 - Create a new account PDA and save random number and player key
 3 - You can create a fetch function to get a random number generated
     3.1 example:
-    ```
-    let fdn_tx = await program.account.userdropinfo.fetch(userStatsPDA).catch((error) => {
-        console.log(error);
-    });
 
-    ```
+    ``` let fdn_tx = await program.account.userdropinfo.fetch(userStatsPDA).catch((error) => {
+        console.log(error);
+    }); ```
 
 # Special thanks
 This mathematical logic was created thanks to Mario Cabrera, professional Master in Physics.
