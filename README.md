@@ -1,5 +1,5 @@
 # DISTRIBUTION FUNCTION
-
+## _Solana random number, special to games drop_
 
 
 In probability theory, the probability function f(x) is used, also called probability density or probability distribution, which is defined by the proposals (discrete case, x ε N).
@@ -68,32 +68,35 @@ If you want to try, you can copy the code from lib.rs and paste it at https://be
 1 - Cliente get enemy number
 2 - Client create a pseudo-random number
     2.1 - Send varibles to solana program function (getrandomnumber)
-        2.1.1 example:
-        <pre><code>
-        const txHash = await program.methods.getrandomnumber(enemyid,rncli).accounts({
-            drop: userStatsPDA,
-            player: player_pk_key,
-            enemy: enemy_pk_key,       
-            counter: counterPDA,        
-            poolGame: firstWinWallet.publicKey,
-            systemProgram: web3.SystemProgram.programId,
-        })   
-        .signers([firstWinWallet]).rpc();
-        </code></pre>
-    
-    2.2 - Function sum (timestamp + enemyid number + pseudo-random number) to create a main number
-    2.3 - Main number is used to calculate an acumulative function distribution
-    2.4 - Get randon number generated
-    2.5 - Get counter data
-    2.6 - Add new counter data
-    2.7 - Create a new account PDA and save random number and player key
+		    2.1.1 example:
+		    
+		const txHash = await program.methods.getrandomnumber(enemyid,rncli).accounts({
+			drop: userStatsPDA,
+		    player: player_pk_key,
+		    enemy: enemy_pk_key,       
+		    counter: counterPDA,        
+		    poolGame: firstWinWallet.publicKey,
+		    systemProgram: web3.SystemProgram.programId,
+		})  
+		.signers([firstWinWallet]).rpc();
+	        
+   2.2 - Function sum (timestamp + enemyid number + pseudo-random number) to create a main number
+   2.3 - Main number is used to calculate an acumulative function distribution
+   2.4 - Get randon number generated
+   2.5 - Get counter data
+   2.6 - Add new counter data
+   2.7 - Create a new account PDA and save random number and player key
 3 - You can create a fetch function to get a random number generated
-    3.1 example:
-    <pre><code>
+	3.1 example:
+    
     let fdn_tx = await program.account.userdropinfo.fetch(userStatsPDA).catch((error) => {
         console.log(error);
     }); 
-    </code></pre>
 
 ## Special thanks
-This mathematical logic was created thanks to Mario Cabrera, professional Master in Physics.
+This mathematical logic was created thanks to **Mario Cabrera**, professional Master in Physics.
+
+## License
+
+MIT
+**Free Software, Build!**
