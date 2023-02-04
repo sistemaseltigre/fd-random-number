@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 
-declare_id!("BSenu1evjTH5CZ9uKrrSRXAMRHbV7r3u99fx6b5M7qV3");
+declare_id!("J1wXTXm5azpgdq2K76DYTCrdAcoX9FMWPnJZ3hLgWF3e");
 
 #[program]
 pub mod fd_random_number {
     use super::*;
 
-    pub fn getrandomnumber(ctx: Context<Dropcoin>, enemyid:u8) -> Result<()> {
+    pub fn getrandomnumber(ctx: Context<Dropcoin>, enemyid:u8, rncli:u8) -> Result<()> {
         msg!("Creating function distribution number...");           
     
         //Generate random number BEGIN
@@ -15,7 +15,9 @@ pub mod fd_random_number {
         let fd_n = fd_arr.len();
         
         let clock = Clock::get()?;
-        let current_timestamp = clock.unix_timestamp as f64;
+        let rnclib = rncli as f64;
+        let enemyidb = enemyid as f64;
+       let current_timestamp = clock.unix_timestamp as f64;
         msg!("timestamp: {}", current_timestamp);
     
         let mut prefix: [i32; 50] = [0; 50];
@@ -26,7 +28,7 @@ pub mod fd_random_number {
             prefix[i] = prefix[i - 1] + fd_freq[i];
         }
         
-        let num_rand = current_timestamp % 0.9 ;
+        let num_rand = (enemyidb+current_timestamp+rnclib) % 0.9 ;
         
         msg!("num_rand: {}", num_rand);
         
@@ -68,7 +70,7 @@ pub mod fd_random_number {
 }
 
 #[derive(Accounts)]
-#[instruction(enemyid: u8)]
+#[instruction(enemyid: u8, rncli: u8)]
 pub struct Dropcoin<'info> {
    
     
@@ -77,7 +79,7 @@ pub struct Dropcoin<'info> {
       #[account(
         init_if_needed,
         payer = pool_game,
-        space = 8 + 8,
+        space = std::mem::size_of::<Counter>() + 8 + 8,
         seeds = ["enemykill".as_bytes().as_ref(), player.key().as_ref()],
         bump
     )]
@@ -98,7 +100,7 @@ pub struct Dropcoin<'info> {
         init_if_needed,
         payer = pool_game,
         space =  std::mem::size_of::<Userdropinfo>() + 8,
-        seeds = ["drop".as_bytes().as_ref(), player.key().as_ref(), enemy.key().as_ref(), &[counter.count]], 
+        seeds = ["drop".as_bytes().as_ref(), player.key().as_ref(), enemy.key().as_ref(), &[counter.count.try_into().unwrap()]], 
         bump
     )]
     pub drop: Account<'info, Userdropinfo>,
@@ -131,7 +133,7 @@ pub struct NumberInfo {
 
 #[account]
 pub struct Counter {
-    pub count: u8,
+    pub count: u64,
     pub idenemy: u8,
 }
 
